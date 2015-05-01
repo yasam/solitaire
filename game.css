@@ -1,0 +1,44 @@
+.buttons
+{
+	position:absolute;
+}
+
+.card
+{
+/*
+	font-family: "Trebuchet MS, Tahoma, Verdana, Arial, sans-serif";
+	
+	border-style:solid;
+	border-width:1px;
+*/	
+	width:71px;
+	height:96px;
+	position:absolute;
+}
+.raw
+{
+	border-style:solid;
+	border-width:1px;
+	width:79px;
+	height:104px;
+	background-color:#eeffee;
+	position:absolute;
+}
+.main
+{
+	position:absolute;
+	border-style:solid;
+	border-width:3px;
+	top:0px;
+	left:0px;
+	width:840px;
+	height:700px;
+	background-color:#88aa88;
+
+}
+.debug
+{
+	top:900px;
+	left:0px;
+
+}
