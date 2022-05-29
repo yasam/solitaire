@@ -518,7 +518,7 @@ function initRaws()
 	for(var i=0;i<10;i++)
 	{
 		type = RT_IN;
-		top = 10;
+		top = RAW_SPACE;
 		left = 10+i*(CARD_WIDTH+RAW_SPACE);
 		RAWS.push(new Raw(type, i, left, top));
 	}
@@ -531,8 +531,8 @@ function initRaws()
 		RAWS.push(new Raw(type, i+10, left, top));
 	}
 	// closed cards
-	RAW_OPEN = new Raw(RT_OUT, RAW_OPEN_INDEX, 11*(CARD_WIDTH+RAW_SPACE)+4*RAW_SPACE, (CARD_HEIGHT+RAW_SPACE)*4.75);
-	RAW_HAND = new Raw(RT_OUT, RAW_HAND_INDEX, 10*(CARD_WIDTH+RAW_SPACE)+3*RAW_SPACE, (CARD_HEIGHT+RAW_SPACE)*4.75);
+	RAW_OPEN = new Raw(RT_OUT, RAW_OPEN_INDEX, 11*(CARD_WIDTH+RAW_SPACE)+4*RAW_SPACE, (CARD_HEIGHT+RAW_SPACE)*4.65);
+	RAW_HAND = new Raw(RT_OUT, RAW_HAND_INDEX, 10*(CARD_WIDTH+RAW_SPACE)+3*RAW_SPACE, (CARD_HEIGHT+RAW_SPACE)*4.65);
 	
 	$("#raw"+RAW_OPEN_INDEX).css("background-color", "white");
 	$("#raw"+RAW_HAND_INDEX).css("background-color", "white");
