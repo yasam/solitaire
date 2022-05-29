@@ -8,8 +8,8 @@ var CARD_BLACK = "BLACK";
 var RAWS;
 var RT_IN = 0;
 var RT_OUT = 1;
-var CARD_WIDTH=71;
-var CARD_HEIGHT=96;
+var CARD_WIDTH=95;
+var CARD_HEIGHT=120;
 var RAW_SPACE=10;
 var RAW_HAND;
 var RAW_OPEN;
@@ -283,8 +283,8 @@ function Card(Type, Index)
 	{
 		//var str = "<img width=18 height=22 src=img/"+this.type+".bmp> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font size=6 color="+this.color+">"+this.name+"</font>"
 		//var str = "<img width=80 height=110 src=img/cards-150/"+this.type+"-"+this.name+"-150.png>"
-		//var str = "<img width=80 height=110 src=img/cards-20/"+this.name+this.type.charAt(0)+".GIF>"
-		var str = "<img src=img/cards-gif/"+this.type.charAt(0)+this.name+".GIF>";
+		//var str = "<img width=80 height=110 src=img/cards-20/"+this.name+this.type.charAt(0)+".gif>"
+		var str = "<img src=img/cards-gif/"+this.type.charAt(0)+this.name+".gif>";
 		var hcolor;
 		
 		if(this.opened == true)
@@ -304,7 +304,7 @@ function Card(Type, Index)
 	}
 	var close = function()
 	{
-		$(this.getSelector()).html("<img src=img/cards-gif/b1fv.GIF>");
+		$(this.getSelector()).html("<img src=img/cards-gif/b1fv.gif>");
 		//$(this.getSelector()).css("background-color", "#777777");
 		//$("#card"+this.ID).bind('dblclick', cardClick);
 		this.opened = false;
@@ -404,8 +404,8 @@ function Raw(Type, Index, Left, Top)
 		len = this.cardList.length;
 		if(len > 0)
 			return this.cardList[len -1];
-		else
-			return false;
+		
+		return false;
 	}
 	var removeCardList = function(card)
 	{
@@ -514,59 +514,53 @@ function initRaws()
 	
 	RAWS = new Array();
 	
-	for(var i=0;i<18;i++)
+	// random part
+	for(var i=0;i<10;i++)
 	{
-		if(i < 10)
-		{
-			type = RT_IN;
-			top = 10;
-			left = 10+i*(CARD_WIDTH+RAW_SPACE);
-		}
-		else
-		{
-			type = RT_OUT;
-			if(i%2)
-			{
-				left = 880;
-				top = 10+(i-11)*(CARD_HEIGHT/2 + 20);
-			}
-			else
-			{
-				left = 1000;
-				top = 10+(i-10)*(CARD_HEIGHT/2 + 20);
-			}
-			
-		}	
+		type = RT_IN;
+		top = 10;
+		left = 10+i*(CARD_WIDTH+RAW_SPACE);
 		RAWS.push(new Raw(type, i, left, top));
 	}
-	RAW_OPEN = new Raw(RT_OUT, RAW_OPEN_INDEX, 1000, 580);
-	RAW_HAND = new Raw(RT_OUT, RAW_HAND_INDEX, 880, 580);
+	// ordered part
+	for(var i=0;i<8;i++) 
+	{
+		type = RT_OUT;
+		top = RAW_SPACE + (i/2 >> 0)*(CARD_HEIGHT + 2*RAW_SPACE);
+		left = (10+(i%2))*(CARD_WIDTH+RAW_SPACE)+(3+i%2)*RAW_SPACE;
+		RAWS.push(new Raw(type, i+10, left, top));
+	}
+	// closed cards
+	RAW_OPEN = new Raw(RT_OUT, RAW_OPEN_INDEX, 11*(CARD_WIDTH+RAW_SPACE)+4*RAW_SPACE, (CARD_HEIGHT+RAW_SPACE)*4.75);
+	RAW_HAND = new Raw(RT_OUT, RAW_HAND_INDEX, 10*(CARD_WIDTH+RAW_SPACE)+3*RAW_SPACE, (CARD_HEIGHT+RAW_SPACE)*4.75);
+	
 	$("#raw"+RAW_OPEN_INDEX).css("background-color", "white");
 	$("#raw"+RAW_HAND_INDEX).css("background-color", "white");
+
 	RAWS.push(RAW_HAND);
 	RAWS.push(RAW_OPEN);
 }
 
 function getFreeCard()
 {
-  var ret;
-  var i;
-  
-  if(gameCards != null)
-    return gameCards.pop();
-  
-  
-  
-  while(1)
-  {
-	ret = (Math.floor(Math.random()*100000)) % 104;
+	var ret;
+	var i;
 
-	if(CARDS[ret].check() == false)
-        	break;
-      //ret = (ret +1)%104;
-  }
-  
-  return ret;
+	if(gameCards != null)
+	return gameCards.pop();
+
+
+
+	while(1)
+	{
+		ret = (Math.floor(Math.random()*100000)) % 104;
+
+		if(CARDS[ret].check() == false)
+				break;
+		  //ret = (ret +1)%104;
+	}
+
+	return ret;
 }
 function prepareCards()
 {
@@ -575,9 +569,9 @@ function prepareCards()
 	var len;
 	var index;
 	var count = 0;
-  var clist = null;
-  
-  clist = new Array();
+	var clist = null;
+
+	clist = new Array();
 	
 	len = CARDS.length;
 	for(i=0;i<len;i++)
@@ -594,7 +588,7 @@ function prepareCards()
 		for(j = i; j < 10; )
 		{	
 			index = getFreeCard();
-      clist.push(index);
+			clist.push(index);
 			RAWS[j].addCard(CARDS[index]);
 			CARDS[index].add();
 			j++;
@@ -603,31 +597,31 @@ function prepareCards()
 	for(i=0;i<49;)
 	{
 		index = getFreeCard();
-    clist.push(index);
+		clist.push(index);
 		RAW_HAND.addCard(CARDS[index]);
 		CARDS[index].add();
 		i++;
 	}
 	updateCounts();
-  gameCards = clist;
+	gameCards = clist;
 }
 
 function restartGame()
 {
-  var i;
+	var i;
   
-  for(i=0;i<RAWS.length;i++)
-    RAWS[i].empty();
+	for(i=0;i<RAWS.length;i++)
+		RAWS[i].empty();
   
-  for(i=0;i<CARDS.length;i++)
-  {
-    CARDS[i].close();
-    CARDS[i].remove();
-    $("#card"+i).unbind('click');
-    $("#card"+i).unbind('dblclick');
-  }
-  gameCards.reverse();
-  prepareCards();
+	for(i=0;i<CARDS.length;i++)
+	{
+		CARDS[i].close();
+		CARDS[i].remove();
+		$("#card"+i).unbind('click');
+		$("#card"+i).unbind('dblclick');
+	}
+	gameCards.reverse();
+	prepareCards();
 }
 function newGame()
 {
@@ -653,14 +647,17 @@ function initGame()
 	$("#restartGame").click(function(){
 		restartGame();
 	});
+	
+	//$("#main").css("height", 120);
+	$("#main").css("width", CARD_WIDTH * 10 + RAW_SPACE * 11);
 
-	$("#buttons").css("left", 10);
-	$("#buttons").css("top", 600);
+	$("#buttons").css("left", (CARD_WIDTH + RAW_SPACE) * 13);
+	$("#buttons").css("top", 300);
 
-	$("#close").css("left", 880);
-	$("#close").css("top", 550);
+	$("#close").css("left", 10*(CARD_WIDTH+RAW_SPACE)+3*RAW_SPACE);
+	$("#close").css("top", ((CARD_HEIGHT+RAW_SPACE)*4)+CARD_HEIGHT/2);
 
-	$("#open").css("left", 1000);
-	$("#open").css("top", 550);
+	$("#open").css("left", 11*(CARD_WIDTH+RAW_SPACE)+4*RAW_SPACE);
+	$("#open").css("top", ((CARD_HEIGHT+RAW_SPACE)*4)+CARD_HEIGHT/2);
 
 }
